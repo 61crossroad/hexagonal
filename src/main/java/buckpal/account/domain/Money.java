@@ -13,6 +13,10 @@ public class Money {
     @NonNull
     private final BigInteger amount;
 
+    public boolean isPositiveOrZero() {
+        return this.amount.compareTo(BigInteger.ZERO) >= 0;
+    }
+
     public static Money of(long value) {
         return new Money(BigInteger.valueOf(value));
     }

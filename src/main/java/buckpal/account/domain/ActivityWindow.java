@@ -21,4 +21,8 @@ public class ActivityWindow {
 
         return Money.add(depositBalance, withdrawalBalance.negate());
     }
+
+    public void addActivity(Activity activity) {
+        this.activities.add(activity);
+    }
 }
