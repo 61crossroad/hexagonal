@@ -18,6 +18,9 @@ public class Account {
 
     public boolean withdraw(Money money, AccountId targetAccountId) {
 
+        /*
+        Validation for specific method straight down to THE method!
+         */
         if (!mayWithdraw(money)) {
             return false;
         }
