@@ -12,7 +12,7 @@ public interface ActivityRepository extends JpaRepository<ActivityJpaEntity, Lon
     @Query("select a from ActivityJpaEntity a " +
             "where a.ownerAccountId = :ownerAccountId " +
             "and a.timestamp >= :since")
-    List<AccountJpaEntity> findByOwnerSince(
+    List<ActivityJpaEntity> findByOwnerSince(
             @Param("ownerAccountId") Long ownerAccountId,
             @Param("since")LocalDateTime since);
 
