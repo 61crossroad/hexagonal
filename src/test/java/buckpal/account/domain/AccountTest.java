@@ -30,4 +30,6 @@ public class AccountTest {
         assertThat(account.calculateBalance()).isEqualTo(Money.of(1000L));
     }
 
+    // TODO other cases
+
 }
