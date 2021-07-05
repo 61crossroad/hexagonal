@@ -1,11 +1,9 @@
-package buckpal.account.service;
+package buckpal.account.application.service;
 
 import buckpal.account.application.port.in.SendMoneyCommand;
 import buckpal.account.application.port.out.AccountLock;
 import buckpal.account.application.port.out.LoadAccountPort;
 import buckpal.account.application.port.out.UpdateAccountStatePort;
-import buckpal.account.application.service.MoneyTransferProperties;
-import buckpal.account.application.service.SendMoneyService;
 import buckpal.account.domain.Account;
 import buckpal.account.domain.Account.AccountId;
 import buckpal.account.domain.Money;

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivityJpaEntity {
+class ActivityJpaEntity {
 
     @Id
     @GeneratedValue
