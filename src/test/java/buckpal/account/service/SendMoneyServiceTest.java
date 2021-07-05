@@ -10,10 +10,13 @@ import buckpal.account.domain.Account;
 import buckpal.account.domain.Account.AccountId;
 import buckpal.account.domain.Money;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -50,6 +53,35 @@ public class SendMoneyServiceTest {
         boolean success = sendMoneyService.sendMoney(command);
 
         assertThat(success).isTrue();
+
+        AccountId sourceAccountId = sourceAccount.getId().get();
+        AccountId targetAccountId = targetAccount.getId().get();
+
+        then(accountLock).should().lockAccount(eq(sourceAccountId));
+        then(sourceAccount).should().withdraw(eq(money), eq(targetAccountId));
+        then(accountLock).should().releaseAccount(eq(sourceAccountId));
+
+        then(accountLock).should().lockAccount(eq(targetAccountId));
+        then(targetAccount).should().deposit(eq(money), eq(sourceAccountId));
+        then(accountLock).should().releaseAccount(eq(targetAccountId));
+
+        thenAccountsHaveBeenUpdated(sourceAccountId, targetAccountId);
+    }
+
+    private void thenAccountsHaveBeenUpdated(AccountId... accountIds) {
+        ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
+        then(updateAccountStatePort).should(times(accountIds.length))
+                .updateActivities(accountCaptor.capture());
+
+        List<AccountId> updatedAccountIds = accountCaptor.getAllValues()
+                .stream()
+                .map(Account::getId)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        for (AccountId accountId : accountIds) {
+            assertThat(updatedAccountIds).contains(accountId);
+        }
     }
 
     private void givenDepositWillSucceed(Account account) {
